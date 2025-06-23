@@ -4,6 +4,7 @@ import com.cisco.wccai.grpc.server.interceptors.AuthenticationInterceptor;
 import com.cisco.wccai.grpc.server.interceptors.ServiceExceptionHandler;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.protobuf.services.ProtoReflectionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,7 @@ public class HealthServer {
         Server server = ServerBuilder.forPort(PORT)
                 .addService(new HealthServiceImpl())
                  //.addService(new GrpcServerImpl()) // Add the main service too
+                .addService(ProtoReflectionService.newInstance())
                 .intercept(new AuthenticationInterceptor())
                 .intercept(new ServiceExceptionHandler())
                 .build()
