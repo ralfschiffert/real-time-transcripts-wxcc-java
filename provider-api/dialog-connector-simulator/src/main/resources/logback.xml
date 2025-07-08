@@ -1,0 +1,46 @@
+<configuration>
+
+    <!--
+      This appender uses LogstashEncoder to output structured JSON to the console.
+      Google Cloud Logging will automatically parse this JSON format.
+    -->
+    <appender name="STDOUT_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <providers>
+                <!-- Maps Logback's timestamp to the 'timestamp' JSON field -->
+                <timestamp/>
+
+                <!--
+                  Maps the log level (INFO, WARN, etc.) to the 'severity' field.
+                  This is a special field recognized by Google Cloud Logging.
+                -->
+                <logLevel>
+                    <fieldName>severity</fieldName>
+                </logLevel>
+
+                <!-- Adds the logger name (e.g., com.cisco.wccai.grpc.server.interceptors.AuthenticationInterceptor) -->
+                <loggerName/>
+
+                <!-- Adds the thread name -->
+                <threadName/>
+
+                <!-- The actual log message -->
+                <message/>
+
+                <!-- Includes the full stack trace for exceptions -->
+                <stackTrace/>
+            </providers>
+        </encoder>
+    </appender>
+
+    <!--
+      This is the root logger. It's now configured to use the JSON appender.
+    -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT_JSON" />
+    </root>
+
+    <!-- You can still set levels for noisy packages -->
+    <logger name="io.grpc.netty" level="WARN"/>
+
+</configuration>

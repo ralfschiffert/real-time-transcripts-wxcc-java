@@ -17,6 +17,8 @@ public class GrpcServer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GrpcServer.class);
     private static final int PORT = 8086;
+    //private static final int PORT
+
 
     /**
      * The entry point of application.
@@ -27,8 +29,20 @@ public class GrpcServer {
      */
     public static void main(String [] args) throws IOException, InterruptedException {
 
-       Server server = ServerBuilder.forPort(PORT)
-                .addService(new GrpcServerImpl())
+        String port = System.getenv("PORT");
+        int listeningPort;
+
+        if (port == null || port.isEmpty()) {
+            listeningPort = PORT;
+        } else {
+            listeningPort = Integer.parseInt(port);
+        }
+
+
+       LOGGER.info("the environment variable port is : {}", port);
+
+       Server server = ServerBuilder.forPort(listeningPort)
+                .addService(new ConversationAudioForkServiceImpl())
                 .addService(new HealthServiceImpl())
                 .addService(ProtoReflectionService.newInstance())
                 .intercept(new AuthenticationInterceptor())
@@ -36,7 +50,9 @@ public class GrpcServer {
                 .build()
                 .start();
 
-        LOGGER.info("server started at port : {}", PORT );
+        LOGGER.info("server started at port : {}", listeningPort );
+
+        LOGGER.info("THIS IS AN ADDITIONAL LOG FROM RALF");
 
        LOGGER.info("Initializing the context");
         Context.init();

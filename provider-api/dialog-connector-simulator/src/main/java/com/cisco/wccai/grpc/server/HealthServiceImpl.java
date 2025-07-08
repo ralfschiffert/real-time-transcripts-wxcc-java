@@ -14,7 +14,6 @@ public class HealthServiceImpl extends HealthGrpc.HealthImplBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HealthServiceImpl.class);
 
-    @Override
     public void check(HealthOuterClass.HealthCheckRequest request, 
                      StreamObserver<HealthOuterClass.HealthCheckResponse> responseObserver) {
         LOGGER.info("Health check request received for service: {}", request.getService());
@@ -30,7 +29,6 @@ public class HealthServiceImpl extends HealthGrpc.HealthImplBase {
         LOGGER.info("Health check response sent: SERVING");
     }
 
-    @Override
     public void watch(HealthOuterClass.HealthCheckRequest request, 
                      StreamObserver<HealthOuterClass.HealthCheckResponse> responseObserver) {
         LOGGER.info("Health watch request received for service: {}", request.getService());
